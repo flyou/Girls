@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Girls</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="about_account">\n微博:<a href="http://weibo.com/fangjaylong">凤飞雪未扬</a>\n\nGithub:<a href="https://github.com/flyou">flyou</a>\n\n博客:<a href="http://blog.flyou.ren/">flyou</a></string>
+<string name="about_app">声明:本应用所有数据均来自互联网，且本app仅作学习用途。\n\n相关技术:RXJAVA、MVP、glide、jsoup
+</string>
+</resources>

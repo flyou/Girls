@@ -1,3 +1,9 @@
+# Created by flyou
+### Android template
+
+# ios DS_Store
+.DS_Store
+
 # Built application files
 *.apk
 *.ap_
@@ -11,10 +17,15 @@
 # Generated files
 bin/
 gen/
+out/
+
+# idea
+/.idea/workspace.xml
+/.idea/libraries
 
 # Gradle files
 .gradle/
-build/
+/build
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -30,3 +41,9 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+# Intellij
+*.iml
+
+# Keystore files
+*.jks
