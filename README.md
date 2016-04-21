@@ -15,6 +15,11 @@
 ####- Jsoup数据解析
 ####- glide图片加载
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/3.gif)
+![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003656.png)
+![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003544.png)
+![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003612.png)
+![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003731.png)
+
 
 .
 .
@@ -30,5 +35,6 @@
 
 
 ####[DownLoad Apk](http://7xl7dy.com1.z0.glb.clouddn.com/app-debug.apk "DownLoad")
+
 
 我才不会告诉你们，在源文件里面有网站地址呢
