@@ -6,7 +6,7 @@
 
 
 ### 注意！注意！注意！
-##前方高能，未满十八周岁的开发者请迅速收藏本网页，回家再慢慢看
+###前方高能，未满十八周岁的开发者请迅速收藏本网页，回家再慢慢看
 
 ##特性
 
@@ -14,7 +14,7 @@
 ####- material design 
 ####- Jsoup数据解析
 ####- glide图片加载
-![](http://7xl7dy.com1.z0.glb.clouddn.com/gilrs2.gif)
+![](http://7xl7dy.com1.z0.glb.clouddn.com/3.gif)
 
 .
 .
@@ -28,5 +28,7 @@
 .
 .
 
+
+####[DownLoad Apk](http://7xl7dy.com1.z0.glb.clouddn.com/app-debug.apk "DownLoad")
 
 我才不会告诉你们，在源文件里面有网站地址呢
