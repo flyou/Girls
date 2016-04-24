@@ -268,6 +268,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mPosition = position;
     }
 
+    public int getCurPosition(){ return mPosition; }
+
     public int getLayoutId() {
         return mLayoutId;
     }

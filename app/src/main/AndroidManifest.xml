@@ -29,6 +29,7 @@
             />
         <activity android:name=".ui.ImageDetialActivity">
         </activity>
+        <activity android:name=".ui.ImageViewPagerActivity"/>
     </application>
 
 </manifest>
