@@ -6,22 +6,24 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.flyou.girls.R;
 import com.flyou.girls.adapter.SpacesItemDecoration;
-import com.flyou.girls.adapter.ViewHolder;
-import com.flyou.girls.adapter.recyclerview.CommonAdapter;
-import com.flyou.girls.ui.ImageDetialActivity;
+import com.flyou.girls.adapter.recyclerview.CommonImageAdapter;
+import com.flyou.girls.adapter.recyclerview.OnItemClickListener;
+import com.flyou.girls.ui.typeImageList.ImageViewPagerActivity;
 import com.flyou.girls.ui.typeImageList.domain.TypeImageDomain;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenter;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenterImpl;
 import com.flyou.girls.ui.typeImageList.view.TypeImageListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -30,8 +32,8 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private TypeImageListPersenter mPersenter;
-    private LinearLayoutManager mLayoutManager;
-    private CommonAdapter mAdapter;
+    private StaggeredGridLayoutManager mLayoutManager;
+    private CommonImageAdapter mAdapter;
     private String mLinkUrl;
     private String mTitle;
     private Toolbar mToolbar;
@@ -49,12 +51,14 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
     private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sw_layout);
         mRecyclerView = (RecyclerView) findViewById(R.id.receiverview);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
 
     }
 
@@ -71,8 +75,6 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
             mToolbar.setTitle(mTitle);
         }
-
-
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -114,26 +116,22 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public void receiveImageList(final List<TypeImageDomain> typeImageDomains) {
         if (mAdapter == null) {
-            mAdapter = new CommonAdapter<TypeImageDomain>(TypeImageActivity.this, R.layout.view_item_type_image, typeImageDomains) {
+            mAdapter = new CommonImageAdapter(TypeImageActivity.this, R.layout.view_item_type_image, typeImageDomains);
+            mAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
-                public void convert(ViewHolder holder, final TypeImageDomain typeImageDomain) {
-                    holder.setImageWithUrlAndSize(R.id.imageView, typeImageDomain.getUrl(), typeImageDomain.getWidth(), typeImageDomain.getHeight());
-                    holder.setOnClickListener(R.id.imageView, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(TypeImageActivity.this, ImageDetialActivity.class);
-//                            intent.putParcelableArrayListExtra("imagelist", (ArrayList) typeImageDomains);
-                            intent.putExtra("imageurl", typeImageDomain.getFullSizeUrl());
-                            ActivityOptionsCompat options =
-                                    ActivityOptionsCompat.makeSceneTransitionAnimation(TypeImageActivity.this);
-                            ActivityCompat.startActivity(TypeImageActivity.this, intent, options.toBundle());
-                        }
-                    });
+                public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                    Intent intent = new Intent(TypeImageActivity.this, ImageViewPagerActivity.class);
+                    intent.putParcelableArrayListExtra("imageList", (ArrayList<TypeImageDomain>) typeImageDomains);
+                    intent.putExtra("position", position);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(TypeImageActivity.this);
+                    ActivityCompat.startActivity(TypeImageActivity.this, intent, options.toBundle());
                 }
-            };
-            mLayoutManager = new LinearLayoutManager(TypeImageActivity.this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
+
+                @Override
+                public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                    return false;
+                }
+            });
             //设置item之间的间隔
             SpacesItemDecoration decoration = new SpacesItemDecoration(5);
             mRecyclerView.addItemDecoration(decoration);

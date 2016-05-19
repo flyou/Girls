@@ -21,7 +21,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.flyou.girls.R;
+import com.flyou.girls.ui.typeImageList.widget.ScaleImageView;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
     private SparseArray<View> mViews;
@@ -99,22 +101,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView view = getView(viewId);
         Glide.with(mContext)
                 .load(url)
-                .centerCrop()
-                .crossFade()
                 .placeholder(R.drawable.pic_loading)
+                .crossFade()
                 .error(R.drawable.pic_loading)
                 .into(view);
         return this;
     }
 
     public ViewHolder setImageWithUrlAndSize(int viewId, String url, int width, int height) {
-        ImageView view = getView(viewId);
+        ScaleImageView view = getView(viewId);
+        view.setDefaultValue(height * 1f / width);
         Glide.with(mContext)
                 .load(url)
-                .centerCrop()
-                .crossFade()
                 .placeholder(R.drawable.pic_loading)
-
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
         return this;
     }
