@@ -93,7 +93,7 @@ public abstract class BaseFragment extends Fragment {
 //    * */
 //    public <T> T toObj(String json, Type typeOfT) {
 //        Gson gson = new Gson();
-//        T t = gson.fromJson(json, typeOfT);
+//        T t = gson.fromJson(json, );
 //        return t;
 //    }
 }

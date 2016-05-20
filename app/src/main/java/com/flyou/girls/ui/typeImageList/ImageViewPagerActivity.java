@@ -76,7 +76,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mNumTV.setText(++mPosition + File.separator + mImageList.size());
         mViewPager.setAdapter(new ImagePagerAdapter());
-        mViewPager.setCurrentItem(mPosition);
+        mViewPager.setCurrentItem(--mPosition);
     }
 
     private void initListener() {
