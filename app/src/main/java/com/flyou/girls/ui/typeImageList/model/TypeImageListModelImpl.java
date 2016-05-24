@@ -40,7 +40,7 @@ public class TypeImageListModelImpl implements TypeImageListModel {
                 List<TypeImageDomain> typeImageDomains = new ArrayList();
                 try {
                     Document document = Jsoup.connect(url).get();
-                    Element element = document.getElementsByClass("rgg_imagegrid").first();
+                    Element element = document.getElementById("gallery-1");
                     Elements elementsA = element.getElementsByTag("a");
 
                     for (Element a : elementsA) {
