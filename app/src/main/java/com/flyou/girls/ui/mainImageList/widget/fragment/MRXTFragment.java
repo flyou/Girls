@@ -18,6 +18,7 @@ import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenter;
 import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenterImpl;
 import com.flyou.girls.ui.mainImageList.view.ImageListView;
 import com.flyou.girls.ui.typeImageList.widget.TypeImageActivity;
+import com.flyou.girls.utils.ACache;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
     private LinearLayoutManager mLayoutManager;
     private CommonAdapter mAdapter;
     private List<ImageListDomain> mImageListDomains;
+    private ACache mACache;
 
     @Override
     protected int getLayoutResource() {
@@ -53,6 +55,7 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     protected void initData() {
+        mACache =  ACache.get(getActivity());
         mPersenter = new ImageListPersenterImpl(this);
         switch (getClass().getSimpleName()) {
             case "NewFragment":
@@ -141,6 +144,17 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
                             ActivityCompat.startActivity(context, intent, options.toBundle());
                         }
                     });
+//                    holder.setOnClickListener(R.id.iv_favorite, new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            ViewCompat.animate(v).scaleX(2.0f)
+//                                    .scaleY(2.0f)
+//                                    .alpha(0f)
+//                                    .setDuration(DateUtils.SECOND_IN_MILLIS/2)
+//                                    .setInterpolator(new OvershootInterpolator())
+//                                    .start();
+//                        }
+//                    });
                 }
             };
             mLayoutManager = new LinearLayoutManager(context);

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -123,7 +124,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             });
             downLoad.setTag(mImageList.get(position).getFullSizeUrl());
             ImageView imageView = (ImageView) parent.findViewById(R.id.imageView);
-            displayImage(mImageList.get(position).getFullSizeUrl(), imageView, loading, downLoad);
+            displayImage(mImageList.get(position).getFullSizeUrl(), mImageList.get(position).getUrl(), imageView, loading, downLoad);
             return parent;
         }
 
@@ -137,10 +138,13 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             return view == object;
         }
 
-        void displayImage(final String url, final ImageView imageView, final View loading, final View download) {
+        void displayImage(final String url, String thumbnail, final ImageView imageView, final View loading, final View download) {
+            DrawableRequestBuilder<String> mBuilder = Glide.with(ImageViewPagerActivity.this).load(thumbnail);
+
             Glide.with(ImageViewPagerActivity.this)
                     .load(url)
                     .crossFade()
+//                    .thumbnail(mBuilder)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -153,7 +157,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
                             loading.setVisibility(View.GONE);
                             download.setVisibility(View.VISIBLE);
                             PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
-//                            mAttacher.update();
+                            attacher.update();
                             return false;
                         }
                     })

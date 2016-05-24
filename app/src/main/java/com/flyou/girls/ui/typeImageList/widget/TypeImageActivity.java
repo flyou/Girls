@@ -133,7 +133,7 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
                 }
             });
             //设置item之间的间隔
-            SpacesItemDecoration decoration = new SpacesItemDecoration(5);
+            SpacesItemDecoration decoration = new SpacesItemDecoration(10);
             mRecyclerView.addItemDecoration(decoration);
             mRecyclerView.setAdapter(mAdapter);
 

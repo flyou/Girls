@@ -3,6 +3,8 @@ package com.flyou.girls.ui.mainImageList.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * ============================================================
  * 项目名称：Girls
@@ -16,7 +18,7 @@ import android.os.Parcelable;
  * 版本：@version  V1.0
  * ============================================================
  **/
-public class ImageListDomain implements Parcelable {
+public class ImageListDomain implements Parcelable , Serializable{
     private String linkUrl;
     private  String imageUrl;
     private String imgaeTitle;
