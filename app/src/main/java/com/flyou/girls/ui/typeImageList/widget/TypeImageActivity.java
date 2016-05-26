@@ -16,12 +16,13 @@ import com.flyou.girls.R;
 import com.flyou.girls.adapter.SpacesItemDecoration;
 import com.flyou.girls.adapter.ViewHolder;
 import com.flyou.girls.adapter.recyclerview.CommonAdapter;
-import com.flyou.girls.ui.ImageDetialActivity;
+import com.flyou.girls.ui.ImageViewPagerActivity;
 import com.flyou.girls.ui.typeImageList.domain.TypeImageDomain;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenter;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenterImpl;
 import com.flyou.girls.ui.typeImageList.view.TypeImageListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -116,14 +117,14 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
         if (mAdapter == null) {
             mAdapter = new CommonAdapter<TypeImageDomain>(TypeImageActivity.this, R.layout.view_item_type_image, typeImageDomains) {
                 @Override
-                public void convert(ViewHolder holder, final TypeImageDomain typeImageDomain) {
+                public void convert(final ViewHolder holder, final TypeImageDomain typeImageDomain) {
                     holder.setImageWithUrlAndSize(R.id.imageView, typeImageDomain.getUrl(), typeImageDomain.getWidth(), typeImageDomain.getHeight());
                     holder.setOnClickListener(R.id.imageView, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(TypeImageActivity.this, ImageDetialActivity.class);
-//                            intent.putParcelableArrayListExtra("imagelist", (ArrayList) typeImageDomains);
-                            intent.putExtra("imageurl", typeImageDomain.getFullSizeUrl());
+                            Intent intent = new Intent(TypeImageActivity.this, ImageViewPagerActivity.class);
+                            intent.putParcelableArrayListExtra("imagelist", (ArrayList<TypeImageDomain>) typeImageDomains);
+                            intent.putExtra("position", holder.getCurPosition());
                             ActivityOptionsCompat options =
                                     ActivityOptionsCompat.makeSceneTransitionAnimation(TypeImageActivity.this);
                             ActivityCompat.startActivity(TypeImageActivity.this, intent, options.toBundle());
