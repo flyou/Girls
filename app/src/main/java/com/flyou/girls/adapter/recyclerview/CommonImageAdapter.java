@@ -44,7 +44,7 @@ public class CommonImageAdapter extends RecyclerView.Adapter<CommonImageAdapter.
                 .load(mImageDomain.getUrl())
                 .placeholder(R.drawable.pic_loading)
                 .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.view);
         holder.view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
