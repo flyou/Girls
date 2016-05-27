@@ -40,12 +40,8 @@ public class TypeImageListModelImpl implements TypeImageListModel {
                 List<TypeImageDomain> typeImageDomains = new ArrayList();
                 try {
                     Document document = Jsoup.connect(url).get();
-<<<<<<< HEAD
 //                    Element element = document.getElementsByClass("gallery-icon portrait").first();
                     Element element = document.getElementsByClass("rgg-imagegrid").first();
-=======
-                    Element element = document.getElementById("gallery-1");
->>>>>>> 38f16c20567e1b8577fa2045356f4721ad66cd6e
                     Elements elementsA = element.getElementsByTag("a");
 
                     for (Element a : elementsA) {
@@ -55,7 +51,7 @@ public class TypeImageListModelImpl implements TypeImageListModel {
                         String src = img.attr("src");
                         String width = img.attr("width");
                         String height = img.attr("height");
-                        typeImageDomains.add(new TypeImageDomain(Integer.valueOf(width), Integer.valueOf(height), src,linkUrl));
+                        typeImageDomains.add(new TypeImageDomain(Integer.valueOf(width), Integer.valueOf(height), src, linkUrl));
                     }
                 } catch (IOException e) {
                     subscriber.onError(e);

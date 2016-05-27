@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.flyou.girls.R;
 import com.flyou.girls.ui.typeImageList.domain.TypeImageDomain;
 import com.flyou.girls.ui.typeImageList.widget.ScaleImageView;
+import com.flyou.girls.utils.DebugUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +39,14 @@ public class CommonImageAdapter extends RecyclerView.Adapter<CommonImageAdapter.
     @Override
     public void onBindViewHolder(ImageViewHolder holder, final int position) {
         final TypeImageDomain mImageDomain = mDatas.get(position);
-        holder.view.setDefaultValue(mImageDomain.getHeight() * 1f / mImageDomain.getWidth());
+        float scaleVal = mImageDomain.getHeight() * 1f / mImageDomain.getWidth();
+        DebugUtil.e("scaleVal = " + scaleVal + " |  " + position);
+        holder.view.setDefaultValue(scaleVal);
         Glide.with(mContext)
                 .load(mImageDomain.getUrl())
+                .override(mImageDomain.getWidth(), mImageDomain.getHeight())
                 .placeholder(R.drawable.pic_loading)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .dontAnimate()
                 .into(holder.view);
         holder.view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

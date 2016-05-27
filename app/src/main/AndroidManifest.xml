@@ -26,12 +26,8 @@
         <activity android:name=".ui.typeImageList.widget.TypeImageActivity"/>
         <activity android:name=".ui.ImageDetialActivity">
         </activity>
-<<<<<<< HEAD
         <activity android:name=".ui.typeImageList.ImageViewPagerActivity">
         </activity>
-=======
-        <activity android:name=".ui.ImageViewPagerActivity"/>
->>>>>>> 38f16c20567e1b8577fa2045356f4721ad66cd6e
     </application>
 
 </manifest>

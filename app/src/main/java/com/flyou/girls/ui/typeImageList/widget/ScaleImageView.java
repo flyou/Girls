@@ -42,6 +42,8 @@ public class ScaleImageView extends ImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (0f == defaultValue) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        } else if (1f == defaultValue) {
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
         } else {
             int widMode = MeasureSpec.getMode(widthMeasureSpec);
             int widSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -51,17 +53,15 @@ public class ScaleImageView extends ImageView {
 
             if (widMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY) {
                 heightMeasureSpec = MeasureSpec.makeMeasureSpec(Math.round(widSize * defaultValue), MeasureSpec.EXACTLY);
+                setMeasuredDimension(widSize, MeasureSpec.getSize(heightMeasureSpec));
+                return;
             } else if (widMode != MeasureSpec.EXACTLY && heightMode == MeasureSpec.EXACTLY) {
                 widthMeasureSpec = MeasureSpec.makeMeasureSpec(Math.round(heightSize / defaultValue), MeasureSpec.EXACTLY);
+                setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), heightSize);
+                return;
             } else {
-                if (widSize != 0) {
-                    heightMeasureSpec = MeasureSpec.makeMeasureSpec(Math.round(widSize * defaultValue), MeasureSpec.EXACTLY);
-                } else if (heightSize != 0) {
-                    widthMeasureSpec = MeasureSpec.makeMeasureSpec(Math.round(heightSize / defaultValue), MeasureSpec.EXACTLY);
-                }
-                //都是atMost 不处理
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             }
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 

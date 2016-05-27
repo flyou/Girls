@@ -37,6 +37,7 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
     private String mLinkUrl;
     private String mTitle;
     private Toolbar mToolbar;
+    private     SpacesItemDecoration decoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,8 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
     @Override
     public void onRefresh() {
-
+//        mRecyclerView.addItemDecoration(decoration);
+        mRecyclerView.invalidateItemDecorations();
         mPersenter.startGetImageList(mLinkUrl);
     }
 
@@ -134,7 +136,7 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
             });
             //设置item之间的间隔
-            SpacesItemDecoration decoration = new SpacesItemDecoration(10);
+            decoration = new SpacesItemDecoration(10);
             mRecyclerView.addItemDecoration(decoration);
             mRecyclerView.setAdapter(mAdapter);
 
