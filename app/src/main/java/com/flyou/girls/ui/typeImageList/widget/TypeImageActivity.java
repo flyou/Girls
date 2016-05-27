@@ -131,6 +131,7 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
                 public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
                     return false;
                 }
+
             });
             //设置item之间的间隔
             SpacesItemDecoration decoration = new SpacesItemDecoration(10);
