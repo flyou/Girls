@@ -1,6 +1,8 @@
-package com.flyou.girls.ui.typeImageList.widget;
+package com.flyou.girls.ui.typeImageList;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -11,13 +13,14 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.flyou.girls.R;
 import com.flyou.girls.adapter.SpacesItemDecoration;
 import com.flyou.girls.adapter.recyclerview.CommonImageAdapter;
 import com.flyou.girls.adapter.recyclerview.OnItemClickListener;
-import com.flyou.girls.ui.typeImageList.ImageViewPagerActivity;
 import com.flyou.girls.ui.typeImageList.domain.TypeImageDomain;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenter;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenterImpl;
@@ -37,12 +40,23 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
     private String mLinkUrl;
     private String mTitle;
     private Toolbar mToolbar;
-    private     SpacesItemDecoration decoration;
+    private SpacesItemDecoration decoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            window.setNavigationBarColor(Color.TRANSPARENT);
+        }
         setContentView(R.layout.activity_type_image);
         initView();
         initDate();
@@ -71,7 +85,6 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
         }
 
         mTitle = getIntent().getStringExtra("title");
-        //设置ToolBar tit了 必须放在    getSupportActionBar().setDisplayHomeAsUpEnabled(true);之前 不然没有效果
         if (!mTitle.isEmpty()) {
 
             mToolbar.setTitle(mTitle);
@@ -94,7 +107,6 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
     @Override
     public void onRefresh() {
-//        mRecyclerView.addItemDecoration(decoration);
         mRecyclerView.invalidateItemDecorations();
         mPersenter.startGetImageList(mLinkUrl);
     }

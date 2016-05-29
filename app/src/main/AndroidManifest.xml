@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.typeImageList.widget.TypeImageActivity"/>
+        <activity android:name=".ui.typeImageList.TypeImageActivity"/>
         <activity android:name=".ui.ImageDetialActivity">
         </activity>
         <activity android:name=".ui.typeImageList.ImageViewPagerActivity">

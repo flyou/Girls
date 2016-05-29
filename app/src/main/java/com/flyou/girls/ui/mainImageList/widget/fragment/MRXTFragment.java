@@ -19,7 +19,7 @@ import com.flyou.girls.ui.mainImageList.domain.ImageListDomain;
 import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenter;
 import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenterImpl;
 import com.flyou.girls.ui.mainImageList.view.ImageListView;
-import com.flyou.girls.ui.typeImageList.widget.TypeImageActivity;
+import com.flyou.girls.ui.typeImageList.TypeImageActivity;
 import com.flyou.girls.utils.ACache;
 import com.flyou.girls.utils.ACacheManager;
 
