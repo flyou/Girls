@@ -18,12 +18,19 @@ import java.io.Serializable;
  * 版本：@version  V1.0
  * ============================================================
  **/
-public class ImageListDomain implements Parcelable , Serializable{
+public class ImageListDomain implements Parcelable, Serializable {
     private String linkUrl;
-    private  String imageUrl;
+    private String imageUrl;
     private String imgaeTitle;
+    private int showType; //0代表显示   -1 不显示；
 
+    public int getShowType() {
+        return showType;
+    }
 
+    public void setShowType(int showType) {
+        this.showType = showType;
+    }
 
     public String getLinkUrl() {
         return linkUrl;
@@ -65,12 +72,14 @@ public class ImageListDomain implements Parcelable , Serializable{
         dest.writeString(this.linkUrl);
         dest.writeString(this.imageUrl);
         dest.writeString(this.imgaeTitle);
+        dest.writeInt(this.showType);
     }
 
     protected ImageListDomain(Parcel in) {
         this.linkUrl = in.readString();
         this.imageUrl = in.readString();
         this.imgaeTitle = in.readString();
+        this.showType = in.readInt();
     }
 
     public static final Parcelable.Creator<ImageListDomain> CREATOR = new Parcelable.Creator<ImageListDomain>() {
@@ -84,4 +93,21 @@ public class ImageListDomain implements Parcelable , Serializable{
             return new ImageListDomain[size];
         }
     };
+
+    @Override
+    public int hashCode() {
+        return imageUrl.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof ImageListDomain) {
+            ImageListDomain u = (ImageListDomain) obj;
+            return hashCode() == u.hashCode();
+        }
+        return super.equals(obj);
+    }
 }

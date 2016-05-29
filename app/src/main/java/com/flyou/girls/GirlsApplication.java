@@ -17,6 +17,6 @@ public class GirlsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ACacheManager.getmManager().init(this);
+        new ACacheManager().init(this);
     }
 }

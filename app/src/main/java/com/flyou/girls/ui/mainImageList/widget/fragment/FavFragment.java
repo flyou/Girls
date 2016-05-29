@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
+import com.flyou.girls.Constant;
 import com.flyou.girls.R;
 import com.flyou.girls.adapter.ViewHolder;
 import com.flyou.girls.adapter.recyclerview.CommonAdapter;
@@ -39,9 +40,9 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
  * 版本：@version  V1.0
  * ============================================================
  **/
-public class SWMTFragment extends BaseFragment implements ImageListView, SwipeRefreshLayout.OnRefreshListener {
+public class FavFragment extends BaseFragment implements ImageListView, SwipeRefreshLayout.OnRefreshListener {
     private ImageListPersenter mPersenter;
-    private String mType;
+    private String mType = Constant.FavFragment;
     private int mCurrentPage = 1;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -57,7 +58,6 @@ public class SWMTFragment extends BaseFragment implements ImageListView, SwipeRe
     @Override
     protected void initData() {
         mPersenter = new ImageListPersenterImpl(this);
-        mType = getType(getClass().getSimpleName());
         mPersenter.startGetImageList(mType, mCurrentPage);
     }
 
@@ -83,10 +83,9 @@ public class SWMTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     public void showLoadFaild(Exception e) {
-        if (mCurrentPage!=1){
+        if (mCurrentPage != 1) {
             Toast.makeText(context, "你太贪心了，已经没有更多图片了", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
 
@@ -99,39 +98,37 @@ public class SWMTFragment extends BaseFragment implements ImageListView, SwipeRe
             return;
         }
 
-        if (mCurrentPage == 1) {
-            mImageListDomains=imageListDomains;
+        if (mCurrentPage == 1 && null == mAdapter) {
+            mImageListDomains = imageListDomains;
             mAdapter = new CommonAdapter<ImageListDomain>(context, R.layout.view_item_fragment_main, mImageListDomains) {
                 @Override
                 public void convert(ViewHolder holder, final ImageListDomain imageListDomain, final int position) {
                     holder.setText(R.id.tv_title, imageListDomain.getImgaeTitle());
-                    holder.setImageWithUrl(R.id.iv_cover, imageListDomain.getImageUrl());
+                    holder.setImageWithUrl(R.id.iv_cover, imageListDomain.getImageUrl(), true);
                     holder.setOnClickListener(R.id.iv_cover, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent=new Intent(context,TypeImageActivity.class);
-                            intent.putExtra("linkUrl",imageListDomain.getLinkUrl());
-                            intent.putExtra("title",imageListDomain.getImgaeTitle());
+                            Intent intent = new Intent(context, TypeImageActivity.class);
+                            intent.putExtra("linkUrl", imageListDomain.getLinkUrl());
+                            intent.putExtra("title", imageListDomain.getImgaeTitle());
                             ActivityOptionsCompat options =
                                     ActivityOptionsCompat.makeSceneTransitionAnimation(context);
                             ActivityCompat.startActivity(context, intent, options.toBundle());
                         }
                     });
-                    if(imageListDomain.getShowType() == -1){
-                        holder.setVisible(R.id.iv_favorite, false);
-                    }
+                    holder.setImageResource(R.id.iv_favorite, R.mipmap.ic_delete);
+
                     holder.setOnClickListener(R.id.iv_favorite, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             ViewCompat.animate(v).scaleX(2.0f)
                                     .scaleY(2.0f)
                                     .alpha(0f)
-                                    .setDuration(DateUtils.SECOND_IN_MILLIS/2)
+                                    .setDuration(DateUtils.SECOND_IN_MILLIS / 2)
                                     .setInterpolator(new OvershootInterpolator())
                                     .start();
-                            v.setVisibility(View.GONE);
-                            mAdapter.setItemType(-1 ,position);
-                            ACacheManager.getManager().saveFavoriteDomian(imageListDomain);
+                            ACacheManager.getManager().removeItem(imageListDomain);
+                            mAdapter.removeItem(position);
                         }
                     });
                 }
@@ -141,8 +138,8 @@ public class SWMTFragment extends BaseFragment implements ImageListView, SwipeRe
             mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
 
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.addOnScrollListener(mOnScrollListener);
-        } else {
+//            mRecyclerView.addOnScrollListener(mOnScrollListener);
+        } else if (mCurrentPage != 1) {
             int lastPosition = mImageListDomains.size() - 1;
             mImageListDomains.addAll(imageListDomains);
             mAdapter.notifyItemRangeInserted(lastPosition, imageListDomains.size());
@@ -175,7 +172,7 @@ public class SWMTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     public void onRefresh() {
-        mCurrentPage=1;
+        mCurrentPage = 1;
         mPersenter.startGetImageList(mType, mCurrentPage);
     }
 }

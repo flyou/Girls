@@ -3,13 +3,15 @@ package com.flyou.girls.ui.mainImageList.widget.fragment;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
-import com.flyou.girls.Constant;
 import com.flyou.girls.R;
 import com.flyou.girls.adapter.ViewHolder;
 import com.flyou.girls.adapter.recyclerview.CommonAdapter;
@@ -19,6 +21,7 @@ import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenterImpl;
 import com.flyou.girls.ui.mainImageList.view.ImageListView;
 import com.flyou.girls.ui.typeImageList.widget.TypeImageActivity;
 import com.flyou.girls.utils.ACache;
+import com.flyou.girls.utils.ACacheManager;
 
 import java.util.List;
 
@@ -55,36 +58,9 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     protected void initData() {
-        mACache =  ACache.get(getActivity());
+        mACache = ACache.get(getActivity());
         mPersenter = new ImageListPersenterImpl(this);
-        switch (getClass().getSimpleName()) {
-            case "NewFragment":
-                mType = Constant.NEW;
-                break;
-            case "XinGanFragment":
-                mType = Constant.XINGGAN;
-                break;
-            case "ShaoNvFragment":
-                mType = Constant.SHAONV;
-                break;
-            case "MRXTFragment":
-                mType = Constant.MRXT;
-                break;
-            case "SWMTFragment":
-                mType = Constant.SWMT;
-                break;
-            case "WMXZFragment":
-                mType = Constant.WMXZ;
-                break;
-            case "WALLPAPERFragment":
-                mType = Constant.WALLPAPER;
-                break;
-            default:
-                mType = Constant.NEW;
-                break;
-
-
-        }
+        mType = getType(getClass().getSimpleName());
         mPersenter.startGetImageList(mType, mCurrentPage);
     }
 
@@ -110,10 +86,9 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     public void showLoadFaild(Exception e) {
-        if (mCurrentPage!=1){
+        if (mCurrentPage != 1) {
             Toast.makeText(context, "你太贪心了，已经没有更多图片了", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -127,34 +102,40 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
         }
 
         if (mCurrentPage == 1) {
-            mImageListDomains=imageListDomains;
+            mImageListDomains = imageListDomains;
             mAdapter = new CommonAdapter<ImageListDomain>(context, R.layout.view_item_fragment_main, mImageListDomains) {
                 @Override
-                public void convert(ViewHolder holder, final ImageListDomain imageListDomain) {
+                public void convert(ViewHolder holder, final ImageListDomain imageListDomain, final int position) {
                     holder.setText(R.id.tv_title, imageListDomain.getImgaeTitle());
                     holder.setImageWithUrl(R.id.iv_cover, imageListDomain.getImageUrl());
                     holder.setOnClickListener(R.id.iv_cover, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent=new Intent(context,TypeImageActivity.class);
-                            intent.putExtra("linkUrl",imageListDomain.getLinkUrl());
-                            intent.putExtra("title",imageListDomain.getImgaeTitle());
+                            Intent intent = new Intent(context, TypeImageActivity.class);
+                            intent.putExtra("linkUrl", imageListDomain.getLinkUrl());
+                            intent.putExtra("title", imageListDomain.getImgaeTitle());
                             ActivityOptionsCompat options =
                                     ActivityOptionsCompat.makeSceneTransitionAnimation(context);
                             ActivityCompat.startActivity(context, intent, options.toBundle());
                         }
                     });
-//                    holder.setOnClickListener(R.id.iv_favorite, new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            ViewCompat.animate(v).scaleX(2.0f)
-//                                    .scaleY(2.0f)
-//                                    .alpha(0f)
-//                                    .setDuration(DateUtils.SECOND_IN_MILLIS/2)
-//                                    .setInterpolator(new OvershootInterpolator())
-//                                    .start();
-//                        }
-//                    });
+                    if (imageListDomain.getShowType() == -1) {
+                        holder.setVisible(R.id.iv_favorite, false);
+                    }
+                    holder.setOnClickListener(R.id.iv_favorite, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ViewCompat.animate(v).scaleX(2.0f)
+                                    .scaleY(2.0f)
+                                    .alpha(0f)
+                                    .setDuration(DateUtils.SECOND_IN_MILLIS / 2)
+                                    .setInterpolator(new OvershootInterpolator())
+                                    .start();
+                            v.setVisibility(View.GONE);
+                            mAdapter.setItemType(-1, position);
+                            ACacheManager.getManager().saveFavoriteDomian(imageListDomain);
+                        }
+                    });
                 }
             };
             mLayoutManager = new LinearLayoutManager(context);
@@ -196,7 +177,7 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     public void onRefresh() {
-        mCurrentPage=1;
+        mCurrentPage = 1;
         mPersenter.startGetImageList(mType, mCurrentPage);
     }
 }

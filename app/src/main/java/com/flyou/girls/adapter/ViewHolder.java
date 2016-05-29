@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.flyou.girls.R;
@@ -98,13 +99,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public ViewHolder setImageWithUrl(int viewId, String url) {
+        setImageWithUrl(viewId, url, false);
+        return this;
+    }
+
+    public ViewHolder setImageWithUrl(int viewId, String url, boolean isDisk) {
         ImageView view = getView(viewId);
-        Glide.with(mContext)
+        DrawableRequestBuilder<String> load = Glide.with(mContext)
                 .load(url)
                 .placeholder(R.drawable.pic_loading)
                 .crossFade()
-                .error(R.drawable.pic_loading)
-                .into(view);
+                .error(R.drawable.pic_loading);
+        if (isDisk) {
+            load.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+        }
+        load.into(view);
         return this;
     }
 
@@ -269,7 +278,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mPosition = position;
     }
 
-    public int getCurPosition(){ return mPosition; }
+    public int getCurPosition() {
+        return mPosition;
+    }
 
     public int getLayoutId() {
         return mLayoutId;

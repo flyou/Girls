@@ -40,7 +40,6 @@ public class CommonImageAdapter extends RecyclerView.Adapter<CommonImageAdapter.
     public void onBindViewHolder(ImageViewHolder holder, final int position) {
         final TypeImageDomain mImageDomain = mDatas.get(position);
         float scaleVal = mImageDomain.getHeight() * 1f / mImageDomain.getWidth();
-        DebugUtil.e("scaleVal = " + scaleVal + " |  " + position);
         holder.view.setDefaultValue(scaleVal);
         Glide.with(mContext)
                 .load(mImageDomain.getUrl())

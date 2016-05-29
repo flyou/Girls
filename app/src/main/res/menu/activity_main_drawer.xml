@@ -30,6 +30,10 @@
             android:id="@+id/nav_wallpaper"
             android:icon="@drawable/ic_wallper"
             android:title="美女壁纸" />
+        <item
+            android:id="@+id/fav_wallpaper"
+            android:icon="@mipmap/kiss"
+            android:title="收藏集合" />
     </group>
 
     <item android:title="关于">

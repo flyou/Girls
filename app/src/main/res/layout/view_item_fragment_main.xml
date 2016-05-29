@@ -35,18 +35,19 @@
                 android:text="宅男女神李秀彬不科学超大胸围"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"/>
-            <!--<ImageView-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:id="@+id/iv_favorite"-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/favorite_add"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:scaleY="1"-->
-                <!--android:scaleX="1"-->
-                <!--android:alpha="1"-->
-                <!--android:contentDescription="@null"/>-->
+
+            <ImageView
+                android:id="@+id/iv_favorite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:alpha="1"
+                android:contentDescription="@null"
+                android:scaleX="1"
+                android:scaleY="1"
+                android:src="@mipmap/kiss"/>
 
 
         </RelativeLayout>

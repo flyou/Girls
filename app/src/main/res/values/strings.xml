@@ -8,4 +8,8 @@
     <string name="about_account">\n微博:<a href="http://weibo.com/fangjaylong">凤飞雪未扬</a>\n\nGithub:<a href="https://github.com/flyou">flyou</a>\n\n博客:<a href="http://blog.flyou.ren/">flyou</a></string>
 <string name="about_app">声明:本应用所有数据均来自互联网，且本app仅作学习用途。\n\n相关技术:RXJAVA、MVP、glide、jsoup
 </string>
+    <string name="had_favorites">已经收藏过了</string>
+    <string name="favorites_success">收藏成功</string>
+    <string name="favorites_failed">收藏失败</string>
+    <string name="fav_delete_success">删除成功</string>
 </resources>

@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.flyou.girls.Constant;
+
 /**
  * ============================================================
  * 项目名称：HenuCenterPro
@@ -72,9 +74,41 @@ public abstract class BaseFragment extends Fragment {
         super.onResume();
 
     }
+
     public void onPause() {
         super.onPause();
 
+    }
+
+    public String getType(String name) {
+        String mType;
+        switch (name) {
+            case "NewFragment":
+                mType = Constant.NEW;
+                break;
+            case "XinGanFragment":
+                mType = Constant.XINGGAN;
+                break;
+            case "ShaoNvFragment":
+                mType = Constant.SHAONV;
+                break;
+            case "MRXTFragment":
+                mType = Constant.MRXT;
+                break;
+            case "SWMTFragment":
+                mType = Constant.SWMT;
+                break;
+            case "WMXZFragment":
+                mType = Constant.WMXZ;
+                break;
+            case "WALLPAPERFragment":
+                mType = Constant.WALLPAPER;
+                break;
+            default:
+                mType = Constant.NEW;
+                break;
+        }
+        return mType;
     }
 
 //    /*

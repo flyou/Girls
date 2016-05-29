@@ -2,6 +2,7 @@ package com.flyou.girls.ui.mainImageList.model;
 
 import com.flyou.girls.Constant;
 import com.flyou.girls.ui.mainImageList.domain.ImageListDomain;
+import com.flyou.girls.utils.ACacheManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,20 +41,26 @@ public class ImageListModelImpl implements ImageListModel {
         Observable<List<ImageListDomain>> observable = Observable.create(new Observable.OnSubscribe<List<ImageListDomain>>() {
             @Override
             public void call(Subscriber<? super List<ImageListDomain>> subscriber) {
+
                 List<ImageListDomain> imageListDomainList = new ArrayList();
+
                 try {
-                    Document document = Jsoup.connect(Constant.BASE_URL + type+page).get();
-                    Element imageListelement = document.getElementById("blog-grid");
+                    if (type.equals(Constant.FavFragment)) {
+                        imageListDomainList.addAll(ACacheManager.getManager().getFavoriteList());
+                    } else {
+                        Document document = Jsoup.connect(Constant.BASE_URL + type + page).get();
+                        Element imageListelement = document.getElementById("blog-grid");
 
-                    Elements imageListElements = imageListelement.getElementsByAttributeValueContaining("class","col-lg-4 col-md-4 three-columns post-box");
-                    for (Element imageListElement : imageListElements) {
-                        Element link = imageListElement.select("a[href]").first();
-                        Element image = imageListElement.select("img").first();
-                        String linkUrl = link.attr("abs:href");
-                        String imageUrl = image.attr("abs:src");
-                        String imageTitle = image.attr("alt").trim();
-                        imageListDomainList.add(new ImageListDomain(linkUrl, imageUrl, imageTitle));
-
+                        Elements imageListElements = imageListelement.getElementsByAttributeValueContaining("class", "col-lg-4 col-md-4 " +
+                                "three-columns post-box");
+                        for (Element imageListElement : imageListElements) {
+                            Element link = imageListElement.select("a[href]").first();
+                            Element image = imageListElement.select("img").first();
+                            String linkUrl = link.attr("abs:href");
+                            String imageUrl = image.attr("abs:src");
+                            String imageTitle = image.attr("alt").trim();
+                            imageListDomainList.add(new ImageListDomain(linkUrl, imageUrl, imageTitle));
+                        }
                     }
                     subscriber.onNext(imageListDomainList);
 

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flyou.girls.R;
+import com.flyou.girls.ui.mainImageList.widget.fragment.FavFragment;
 import com.flyou.girls.ui.mainImageList.widget.fragment.MRXTFragment;
 import com.flyou.girls.ui.mainImageList.widget.fragment.NewFragment;
 import com.flyou.girls.ui.mainImageList.widget.fragment.SWMTFragment;
@@ -103,6 +104,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_wallpaper:
                 changeFragment(new WALLPAPERFragment());
+                break;
+            case  R.id.fav_wallpaper:
+                changeFragment(new FavFragment());
                 break;
             case R.id.nav_share:
                 new MaterialDialog.Builder(MainActivity.this)

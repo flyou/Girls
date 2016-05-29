@@ -1,12 +1,16 @@
 package com.flyou.girls.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.flyou.girls.R;
 import com.flyou.girls.ui.mainImageList.domain.ImageListDomain;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * ==================================================
  * 项目名称：Girls
@@ -18,48 +22,77 @@ import java.lang.reflect.Type;
  */
 public class ACacheManager {
     private final String KEY_LIST = "list";
-    private JsonArray mCacheListDomain;
+    private LinkedList<ImageListDomain> favoriteList;
     private static ACacheManager mManager = null;
     private ACache mACache;
     private Context mContext;
 
+    public ACacheManager() {
+        mManager = this;
+    }
 
-    public static ACacheManager getmManager() {
-        synchronized (ACacheManager.class.getSimpleName()) {
-            if (null == mManager) {
-                synchronized (ACacheManager.class) {
-                    if (null == mManager) {
-                        mManager = new ACacheManager();
-                    }
-                }
-            }
-        }
+
+    public static ACacheManager getManager() {
         return mManager;
     }
 
     public void init(Context ctx) {
         mContext = ctx;
         mACache = ACache.get(ctx);
-        mACache.getAsJSONArray(KEY_LIST);
-
+        try {
+            if (TextUtils.isEmpty(mACache.getAsString(KEY_LIST))) {
+                favoriteList = new LinkedList<>();
+            } else {
+                Object obj = ObjectSerializer.deserialize(mACache.getAsString(KEY_LIST));
+                if (null == obj) {
+                    favoriteList = new LinkedList<>();
+                } else {
+                    favoriteList = (LinkedList<ImageListDomain>) obj;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            favoriteList = new LinkedList<>();
+        }
     }
 
     public void saveFavoriteDomian(ImageListDomain domain) {
-        mCacheListDomain.add(domain.getImageUrl());
-//        mCacheListDomain.contains(domain.getImageUrl());
-        mACache.put(domain.getImageUrl(), domain);
-//        mACache.put(KEY_LIST ,);
+        if (isContains(domain)) {
+            Toast.makeText(mContext, R.string.had_favorites, Toast.LENGTH_SHORT).show();
+        } else {
+            favoriteList.add(domain);
+            try {
+                mACache.put(KEY_LIST, ObjectSerializer.serialize(favoriteList));
+                Toast.makeText(mContext, R.string.favorites_success, Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                Toast.makeText(mContext, R.string.favorites_failed, Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
     }
 
-    private <T> T parse(String value, Type type) {
-        Gson mGson = new Gson();
-        T t = mGson.fromJson(value, type);
-        return t;
+    public boolean isContains(ImageListDomain domain) {
+        if (null == favoriteList) {
+            favoriteList = new LinkedList<>();
+        }
+        return favoriteList.contains(domain);
+
     }
 
-    private String toJson(Object obj) {
-        Gson mGson = new Gson();
-        return mGson.toJson(obj);
+    public List<ImageListDomain> getFavoriteList() {
+        return favoriteList;
     }
 
+    public void removeItem(ImageListDomain imageListDomain) {
+        if (isContains(imageListDomain)) {
+            favoriteList.remove(imageListDomain);
+            try {
+                mACache.put(KEY_LIST, ObjectSerializer.serialize(favoriteList));
+                Toast.makeText(mContext, R.string.fav_delete_success, Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
