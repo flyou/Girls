@@ -19,4 +19,7 @@
     <style name="Transparent" parent="AppTheme.NoActionBar">
 
     </style>
+    <declare-styleable name="ScaleImageView_Style">
+        <attr name="scaleValue" format="float"/>
+    </declare-styleable>
 </resources>

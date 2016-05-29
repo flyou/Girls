@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
+import com.flyou.girls.Constant;
 import com.flyou.girls.R;
 import com.flyou.girls.adapter.ViewHolder;
 import com.flyou.girls.adapter.recyclerview.CommonAdapter;
@@ -20,7 +21,6 @@ import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenter;
 import com.flyou.girls.ui.mainImageList.persenter.ImageListPersenterImpl;
 import com.flyou.girls.ui.mainImageList.view.ImageListView;
 import com.flyou.girls.ui.typeImageList.TypeImageActivity;
-import com.flyou.girls.utils.ACache;
 import com.flyou.girls.utils.ACacheManager;
 
 import java.util.List;
@@ -40,16 +40,15 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
  * 版本：@version  V1.0
  * ============================================================
  **/
-public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRefreshLayout.OnRefreshListener {
+public class FavFragment extends BaseFragment implements ImageListView, SwipeRefreshLayout.OnRefreshListener {
     private ImageListPersenter mPersenter;
-    private String mType;
+    private String mType = Constant.FavFragment;
     private int mCurrentPage = 1;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private CommonAdapter mAdapter;
     private List<ImageListDomain> mImageListDomains;
-    private ACache mACache;
 
     @Override
     protected int getLayoutResource() {
@@ -58,9 +57,7 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
 
     @Override
     protected void initData() {
-        mACache = ACache.get(getActivity());
         mPersenter = new ImageListPersenterImpl(this);
-        mType = getType(getClass().getSimpleName());
         mPersenter.startGetImageList(mType, mCurrentPage);
     }
 
@@ -91,23 +88,23 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
         } else {
             Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
     public void receiveImageList(List<ImageListDomain> imageListDomains) {
         if (null == imageListDomains || imageListDomains.size() == 0) {
-
             Toast.makeText(context, "没有发现更多数据", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (mCurrentPage == 1) {
+        if (mCurrentPage == 1 && null == mAdapter) {
             mImageListDomains = imageListDomains;
             mAdapter = new CommonAdapter<ImageListDomain>(context, R.layout.view_item_fragment_main, mImageListDomains) {
                 @Override
                 public void convert(ViewHolder holder, final ImageListDomain imageListDomain, final int position) {
                     holder.setText(R.id.tv_title, imageListDomain.getImgaeTitle());
-                    holder.setImageWithUrl(R.id.iv_cover, imageListDomain.getImageUrl());
+                    holder.setImageWithUrl(R.id.iv_cover, imageListDomain.getImageUrl(), true);
                     holder.setOnClickListener(R.id.iv_cover, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -119,9 +116,8 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
                             ActivityCompat.startActivity(context, intent, options.toBundle());
                         }
                     });
-                    if (imageListDomain.getShowType() == -1) {
-                        holder.setVisible(R.id.iv_favorite, false);
-                    }
+                    holder.setImageResource(R.id.iv_favorite, R.mipmap.ic_delete);
+
                     holder.setOnClickListener(R.id.iv_favorite, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -131,9 +127,8 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
                                     .setDuration(DateUtils.SECOND_IN_MILLIS / 2)
                                     .setInterpolator(new OvershootInterpolator())
                                     .start();
-                            v.setVisibility(View.GONE);
-                            mAdapter.setItemType(-1, position);
-                            ACacheManager.getManager().saveFavoriteDomian(imageListDomain);
+                            ACacheManager.getManager().removeItem(imageListDomain);
+                            mAdapter.removeItem(position);
                         }
                     });
                 }
@@ -143,8 +138,8 @@ public class MRXTFragment extends BaseFragment implements ImageListView, SwipeRe
             mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
 
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.addOnScrollListener(mOnScrollListener);
-        } else {
+//            mRecyclerView.addOnScrollListener(mOnScrollListener);
+        } else if (mCurrentPage != 1) {
             int lastPosition = mImageListDomains.size() - 1;
             mImageListDomains.addAll(imageListDomains);
             mAdapter.notifyItemRangeInserted(lastPosition, imageListDomains.size());

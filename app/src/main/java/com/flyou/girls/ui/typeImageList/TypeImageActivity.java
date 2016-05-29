@@ -1,22 +1,26 @@
-package com.flyou.girls.ui.typeImageList.widget;
+package com.flyou.girls.ui.typeImageList;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.flyou.girls.R;
 import com.flyou.girls.adapter.SpacesItemDecoration;
-import com.flyou.girls.adapter.ViewHolder;
-import com.flyou.girls.adapter.recyclerview.CommonAdapter;
-import com.flyou.girls.ui.ImageViewPagerActivity;
+import com.flyou.girls.adapter.recyclerview.CommonImageAdapter;
+import com.flyou.girls.adapter.recyclerview.OnItemClickListener;
 import com.flyou.girls.ui.typeImageList.domain.TypeImageDomain;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenter;
 import com.flyou.girls.ui.typeImageList.persenter.TypeImageListPersenterImpl;
@@ -31,16 +35,28 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private TypeImageListPersenter mPersenter;
-    private LinearLayoutManager mLayoutManager;
-    private CommonAdapter mAdapter;
+    private StaggeredGridLayoutManager mLayoutManager;
+    private CommonImageAdapter mAdapter;
     private String mLinkUrl;
     private String mTitle;
     private Toolbar mToolbar;
+    private SpacesItemDecoration decoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            window.setNavigationBarColor(Color.TRANSPARENT);
+        }
         setContentView(R.layout.activity_type_image);
         initView();
         initDate();
@@ -50,12 +66,14 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
     private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sw_layout);
         mRecyclerView = (RecyclerView) findViewById(R.id.receiverview);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
 
     }
 
@@ -67,13 +85,10 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
         }
 
         mTitle = getIntent().getStringExtra("title");
-        //设置ToolBar tit了 必须放在    getSupportActionBar().setDisplayHomeAsUpEnabled(true);之前 不然没有效果
         if (!mTitle.isEmpty()) {
 
             mToolbar.setTitle(mTitle);
         }
-
-
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -92,7 +107,7 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
 
     @Override
     public void onRefresh() {
-
+        mRecyclerView.invalidateItemDecorations();
         mPersenter.startGetImageList(mLinkUrl);
     }
 
@@ -115,28 +130,25 @@ public class TypeImageActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public void receiveImageList(final List<TypeImageDomain> typeImageDomains) {
         if (mAdapter == null) {
-            mAdapter = new CommonAdapter<TypeImageDomain>(TypeImageActivity.this, R.layout.view_item_type_image, typeImageDomains) {
+            mAdapter = new CommonImageAdapter(TypeImageActivity.this, R.layout.view_item_type_image, typeImageDomains);
+            mAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
-                public void convert(final ViewHolder holder, final TypeImageDomain typeImageDomain) {
-                    holder.setImageWithUrlAndSize(R.id.imageView, typeImageDomain.getUrl(), typeImageDomain.getWidth(), typeImageDomain.getHeight());
-                    holder.setOnClickListener(R.id.imageView, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(TypeImageActivity.this, ImageViewPagerActivity.class);
-                            intent.putParcelableArrayListExtra("imagelist", (ArrayList<TypeImageDomain>) typeImageDomains);
-                            intent.putExtra("position", holder.getCurPosition());
-                            ActivityOptionsCompat options =
-                                    ActivityOptionsCompat.makeSceneTransitionAnimation(TypeImageActivity.this);
-                            ActivityCompat.startActivity(TypeImageActivity.this, intent, options.toBundle());
-                        }
-                    });
+                public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                    Intent intent = new Intent(TypeImageActivity.this, ImageViewPagerActivity.class);
+                    intent.putParcelableArrayListExtra("imageList", (ArrayList<TypeImageDomain>) typeImageDomains);
+                    intent.putExtra("position", position);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(TypeImageActivity.this);
+                    ActivityCompat.startActivity(TypeImageActivity.this, intent, options.toBundle());
                 }
-            };
-            mLayoutManager = new LinearLayoutManager(TypeImageActivity.this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
+
+                @Override
+                public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                    return false;
+                }
+
+            });
             //设置item之间的间隔
-            SpacesItemDecoration decoration = new SpacesItemDecoration(5);
+            decoration = new SpacesItemDecoration(10);
             mRecyclerView.addItemDecoration(decoration);
             mRecyclerView.setAdapter(mAdapter);
 

@@ -1,4 +1,4 @@
-package com.flyou.girls.ui;
+package com.flyou.girls.ui.typeImageList;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -61,7 +62,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_image_view_pager);
-        mImageList = getIntent().getParcelableArrayListExtra("imagelist");
+        mImageList = getIntent().getParcelableArrayListExtra("imageList");
         mPosition = getIntent().getIntExtra("position", 0);
         if (mImageList == null || mImageList.isEmpty()) {
             finish();
@@ -74,9 +75,9 @@ public class ImageViewPagerActivity extends AppCompatActivity {
     private void initView() {
         mNumTV = (TextView) findViewById(R.id.numTV);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mNumTV.setText(mPosition + 1 + "/" + mImageList.size());
+        mNumTV.setText(++mPosition + File.separator + mImageList.size());
         mViewPager.setAdapter(new ImagePagerAdapter());
-        mViewPager.setCurrentItem(mPosition);
+        mViewPager.setCurrentItem(--mPosition);
     }
 
     private void initListener() {
@@ -84,7 +85,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mNumTV.setText((position + 1) + "/"
+                mNumTV.setText(++position + File.separator
                         + mImageList.size());
             }
 
@@ -123,7 +124,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             });
             downLoad.setTag(mImageList.get(position).getFullSizeUrl());
             ImageView imageView = (ImageView) parent.findViewById(R.id.imageView);
-            displayImage(mImageList.get(position).getFullSizeUrl(),imageView,loading,downLoad);
+            displayImage(mImageList.get(position).getFullSizeUrl(), mImageList.get(position).getUrl(), imageView, loading, downLoad);
             return parent;
         }
 
@@ -137,11 +138,13 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             return view == object;
         }
 
-        void displayImage(final String url,final ImageView imageView,final View loading,final View download) {
+        void displayImage(final String url, String thumbnail, final ImageView imageView, final View loading, final View download) {
+            DrawableRequestBuilder<String> mBuilder = Glide.with(ImageViewPagerActivity.this).load(thumbnail);
+
             Glide.with(ImageViewPagerActivity.this)
                     .load(url)
-//                .centerCrop()
                     .crossFade()
+//                    .thumbnail(mBuilder)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -149,11 +152,12 @@ public class ImageViewPagerActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean
+                                isFromMemoryCache, boolean isFirstResource) {
                             loading.setVisibility(View.GONE);
                             download.setVisibility(View.VISIBLE);
                             PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
-//                            mAttacher.update();
+                            attacher.update();
                             return false;
                         }
                     })

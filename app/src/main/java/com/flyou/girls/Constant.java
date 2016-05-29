@@ -22,4 +22,5 @@ public class Constant {
     public static  final String SWMT="/cat/swmt/page/";
     public static  final String WMXZ="/cat/wmxz/page/";
     public static  final String WALLPAPER="/cat/wallpaper/page";
+    public static  final String FavFragment="cache";
 }

@@ -1,42 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-<android.support.v7.widget.CardView
-    android:layout_margin="@dimen/image_new_list_margin_bottom"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardElevation="5dp"
-    android:layout_width="match_parent"
-    android:layout_height="200dp">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
-    <RelativeLayout
-
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="200dp"
+        android:layout_margin="@dimen/image_new_list_margin_bottom"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardElevation="5dp">
 
-        <ImageView
-            android:id="@+id/iv_cover"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent">
 
-            android:scaleType="fitXY"
-           />
+            <ImageView
+                android:id="@+id/iv_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                />
 
-<TextView
-    android:id="@+id/tv_title"
-    android:gravity="left"
-    android:padding="5dp"
-    android:textSize="18sp"
-    android:textColor="@android:color/white"
-    android:text="宅男女神李秀彬不科学超大胸围"
-    android:layout_alignParentBottom="true"
-    android:background="#55000000"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="#44000000"
+                android:gravity="left"
+                android:padding="5dp"
+                android:text="宅男女神李秀彬不科学超大胸围"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
 
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/iv_favorite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:alpha="1"
+                android:contentDescription="@null"
+                android:scaleX="1"
+                android:scaleY="1"
+                android:src="@mipmap/kiss"/>
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
