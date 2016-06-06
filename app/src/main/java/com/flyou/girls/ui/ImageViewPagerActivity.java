@@ -165,6 +165,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
                 @Override
                 public void call(Subscriber<? super String> subscriber) {
                     String fileName = System.currentTimeMillis() + ".jpg";
+                    File folader = new File(Environment.getExternalStorageDirectory() + File.separator + "Girls");
                     File file = new File(Environment.getExternalStorageDirectory() + File.separator + "Girls", fileName);
 
                     if (Environment.getExternalStorageState().equals(
@@ -172,10 +173,8 @@ public class ImageViewPagerActivity extends AppCompatActivity {
                             Environment.MEDIA_MOUNTED)) {
 
                         try {
-
-
-                            if (!file.exists()) {
-                                file.mkdirs();
+                            if (!folader.exists()) {
+                                folader.mkdirs();
                             }
                             // 从网络上获取图片
                             URL url = new URL(imageUrl);
