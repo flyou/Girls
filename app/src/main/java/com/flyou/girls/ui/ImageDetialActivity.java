@@ -93,9 +93,7 @@ public class ImageDetialActivity extends AppCompatActivity implements View.OnCli
                         String fileName = System.currentTimeMillis() + ".jpg";
                         File file = new File(Environment.getExternalStorageDirectory() + File.separator+"Girls", fileName);
 
-                        if (Environment.getExternalStorageState().equals(
-
-                                Environment.MEDIA_MOUNTED)) {
+                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
                             try {
 
