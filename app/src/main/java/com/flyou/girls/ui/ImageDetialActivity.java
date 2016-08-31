@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.jar.Manifest;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -96,8 +97,6 @@ public class ImageDetialActivity extends AppCompatActivity implements View.OnCli
                         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
                             try {
-
-
                                 if (!file.exists()){
                                     file.mkdirs();
                                 }
