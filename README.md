@@ -23,7 +23,7 @@
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003612.png)
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003731.png)
 
-####[DownLoad Apk](http://o9259bd5a.bkt.clouddn.com/girls-release.apk)"DownLoad")
+####[DownLoad](http://fir.im/Girls)"DownLoad")
 
 
 我才不会告诉你们，在源文件里面有网站地址呢
