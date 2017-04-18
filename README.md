@@ -11,19 +11,19 @@
 -------------------
 
 
-##特性
+## 特性
 
-####- XJAVA+MVP
-####- material design 
-####- Jsoup数据解析
-####- glide图片加载
+#### - XJAVA+MVP
+#### - material design 
+#### - Jsoup数据解析
+#### - glide图片加载
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/3.gif)
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003656.png)
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003544.png)
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003612.png)
 ![](http://7xl7dy.com1.z0.glb.clouddn.com/device-2016-04-22-003731.png)
-####最新apk下载地址,猛戳下面
-####[DownLoad](http://fir.im/Girls)"DownLoad")
+#### 最新apk下载地址,猛戳下面
+#### [DownLoad](http://fir.im/Girls)"DownLoad")
 
 
 我才不会告诉你们，在源文件里面有网站地址呢
@@ -33,7 +33,7 @@
 
 
 
-##About me
+## About me
 - weibo：[@flyou](http://weibo.com/fangjaylong)
 - Email：<fangjaylong@gmail.com>
 
